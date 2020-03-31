@@ -84,7 +84,12 @@ questions = [
 
 ]
 
-console.log('working')
+// inquirer.prompt(questions)
+// .then function(){
+
+// }
+
+// console.log('working')
 
 // inquirer
 // .prompt(questions)

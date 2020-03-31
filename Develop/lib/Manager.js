@@ -4,7 +4,7 @@ const Employee = require("./Employee");
 
 class Manager extends Employee {
 
-    constructor(officeNumber, name, id, email) {
+    constructor(name, id, email, officeNumber) {
 
 
       super(name, id, email);
@@ -12,13 +12,28 @@ class Manager extends Employee {
 
     }
   
+    getOfficeNumber(){
 
+        if (!this.officeNumber){
+            console.log("No officeNumber, try again")
+        }
+        else{
+        return this.officeNumber;
+    
+        }
+
+    }
 
     getRole(){
 
-        return;
-    }
+        // if (!new Manager){
+        //     console.log('Error, Please try again')
+        // }else{
+        return 'Manager'
+    // }
   }
+}
+  module.exports = Manager;
 
-  const Michael = new Manager("8765", "Michael", '1234', "m@gmail.com" )
-  console.log(Michael)
+//   const Michael = new Manager("8765", "Michael", '1234', "m@gmail.com" )
+//   console.log(Michael)

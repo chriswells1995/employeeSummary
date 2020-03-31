@@ -4,7 +4,7 @@ const Employee = require("./Employee");
 
 class Intern extends Employee {
 
-    constructor(school, name, id, email) {
+    constructor(name, id, email, school) {
 
 
       super(name, id, email)
@@ -13,14 +13,26 @@ class Intern extends Employee {
     }
     getSchool(){
 
+        if (!this.school){
+            console.log("No school, try again")
+        }
+        else{
         return this.school;
+    
+        }
+
     }
 
     getRole(){
 
-        return;
+        if (!new Intern){
+            console.log('Error, Please try again')
+        }else{
+        return 'Intern'
     }
   }
-  
-  const Ryan = new Intern("Rname", "Ryan", '1234', "r@gmail.com" )
-  console.log(Ryan)
+}
+  module.exports = Intern;
+
+//   const Ryan = new Intern("Rname", "Ryan", '1234', "r@gmail.com" )
+//   console.log(Ryan)

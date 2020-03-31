@@ -8,29 +8,49 @@ class Employee {
     constructor(name, id, email) {
       this.name = name;
       this.id = id;
-      this.email-email;
+      this.email = email;
 
     }
   
     getName() {
 
-        return this.name;        
-    }
+        if (!this.name){
+            console.log("No name, try again")
+        }
+        else{
+        return this.name;
+    
+        }    }
 
-    getID(){
+    getId(){
 
 
+        if (!this.id){
+            console.log("No ID, try again")
+        }
+        else{
         return this.id;
-    }
+    
+        }    }
 
     getEmail(){
-
+        if (!this.email){
+            console.log("No email, try again")
+        }else{
         return this.email;
+
+
+        }
+
     }
 
     getRole(){
-
-        return;
+        // if (!new Employee){
+        //     console.log('Error, Please try again')
+        // }else{
+        return 'Employee'
+ 
+        // }
     }
   }
   

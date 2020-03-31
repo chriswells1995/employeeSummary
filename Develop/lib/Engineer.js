@@ -4,7 +4,7 @@ const Employee = require("./Employee");
 
 class Engineer extends Employee{
 
-    constructor(github, name, id, email) {
+    constructor(name, id, email, github) {
 
 
       super(name, id, email)
@@ -13,14 +13,25 @@ class Engineer extends Employee{
     }
     getGitHub(){
 
+        if (!this.github){
+            console.log("No github username, try again")
+        }
+        else{
         return this.github;
-    }
+    
+        }    }
 
     getRole(){
 
-        return;
+        if (!new Engineer){
+            console.log('Error, Please try again')
+        }else{
+        return 'Engineer'
     }
   }
-  
-  const Daryl = new Engineer("Dname", "Daryl", '1234', "d@gmail.com" )
-  console.log(Daryl)
+}
+  module.exports = Engineer;
+
+
+//   const Daryl = new Engineer("Dname", "Daryl", '1234', "d@gmail.com" )
+//   console.log(Daryl)
