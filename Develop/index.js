@@ -1,179 +1,222 @@
-// const Manager = require("./lib/Manager");
-// const Engineer = require("./lib/Engineer");
-// const Intern = require("./lib/Intern");
-// const inquirer = require("inquirer");
-// const path = require("path");
-// const fs = require("fs");
+const Manager = require("./lib/Manager");
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
+const inquirer = require("inquirer");
+const path = require("path");
+const fs = require("fs");
 
-// const OUTPUT_DIR = path.resolve(__dirname, "output")
-// const outputPath = path.join(OUTPUT_DIR, "team.html");
-// ​
-// const html = [];
+const OUTPUT_DIR = path.resolve(__dirname, "output")
+const outputPath = path.join(OUTPUT_DIR, "team.html");
 
-// const render = require("./lib/htmlRenderer");
+let teamMembers = [];
 
+const render = require("./lib/htmlRenderer");
 
-// // questions = [
+const managerQuestions = [
 
-// //     {
-// //         type: "input",
-// //         message: "Enter Name",
-// //         name: 'name',
-// //     },
-// //     {
-// //         type: "input",
-// //         message: "Enter Email",
-// //         name: 'email',
-// //     },
-// //     {
-// //         type: "rawList",
-// //         message: "Enter Role",
-// //         choices: ["Manager", "Engineer", "Intern"],
-// //         name: 'role',
-// //     },
-// //     {
-// //         type: "input",
-// //         message:"Enter office number",
-// //         name:"officeNumber",
+    {
+        type: "input",
+        message: "Please enter the Manager's name",
+        name: "name"
+    },
 
-// //         when: function(answers){
-// //             return answers.role==="Manager"
-// //         }
-// //     },
-// //     {
-// //         type: "input",
-// //         message:"Enter githib username",
-// //         name:"github",
+    {
+        type: "input",
+        message: "Please enter the employee ID number",
+        name: "id"
+    },
 
-// //         when: function(answers){
-// //             return answers.role==="Engineer"
-// //         }
-// //     },
-// //     {
-// //         type: "input",
-// //         message:"Enter School",
-// //         name:"school",
-
-// //         when: function(answers){
-// //             return answers.role==="Intern"
-// //         }
-// //     }
+    {
+        type: "input",
+        message: "Please enter the email",
+        name: "email"
+    },
 
 
 
-// // ]
+    {
+        type: "input",
+        message: "Please enter the office number",
+        name: "officeNumber",
 
 
-// // define a function to utilize the program
-// function start(){
-//     // define constant questions for the inquirer prompt
-//     const questions = [
-//       {
-//           type: "list",
-//           message: "Please select a task",
-//           choices: ["I would like to enter an employee", "I would like to exit the program"],
-//           name: "options",
-//       },
-  
-//       {    
-//           type: "confirm",
-//           message: "Are you sure you want to exit the program?",
-//           name: "exit",
-//           when: function(answers){
-//               if(answers.options === "I would like to exit the program"){
-//                     process.exit();
+    }
+]
 
+const questions = [
+
+    {
+        type: "input",
+        message: "Please enter the name",
+        name: "name"
+    },
+
+    {
+        type: "input",
+        message: "Please enter the employee ID number",
+        name: "id"
+    },
+
+    {
+        type: "input",
+        message: "Please enter the email",
+        name: "email"
+    },
+
+    {
+        type: "list",
+        message: "Please select the role",
+        choices: ["Engineer", "Intern"],
+        name: "role"
+    },
+
+
+
+
+
+    {
+        type: "input",
+        message: "Please enter the gitHub username",
+        name: "gitHub",
+        when: function (answers) {
+            return answers.role === "Engineer";
+        }
+    },
+
+    {
+        type: "input",
+        message: "Please enter the school name",
+        name: "school",
+        when: function (answers) {
+            return answers.role === "Intern";
+        }
+    }
+]
+// define a function to utilize the program
+function createManager() {
+    // define constant questions for the inquirer prompt
+    console.log("Create your team now")
+
+
+    // use inquirer to gather information about the development team members by prompting the questions variable
+    inquirer
+        .prompt(managerQuestions)
+        // use .then promise and feed in the parameters of name, id, email, role, officeNumber, gitHub, and school
+        .then(function (answers) {
+            const manager = new Manager(answers.name, parseInt(answers.id), answers.email, answers.officeNumber);
+            teamMembers.push(manager);
+
+
+            createTeam()
+            // addAnother();
+        })
+}
+
+function createTeam() {
+    inquirer
+        .prompt([{
+            type: "list",
+            message: "What would you like to do?",
+            choices: ["Add Team Member", "Finished Building Team"],
+            name: "choice"
+        }]
+        )
+        .then(function (answers) {
+
+            if (answers.choice === "Add Team Member") {
+                addTeamMember()
+
+            }
+            else {
+                buildTeam()
+
+            }
+        })
+
+
+}
+
+function addTeamMember() {
+    // define constant questions for the inquirer prompt
+
+
+
+    // use inquirer to gather information about the development team members by prompting the questions variable
+    inquirer
+        .prompt(questions)
+        // use .then promise and feed in the parameters of name, id, email, role, officeNumber, gitHub, and school
+        .then(function (answers) {
+
+            switch (answers.role) {
+
+
+                case "Engineer":
+                    const engineer = new Engineer(answers.name, parseInt(answers.id), answers.email, answers.gitHub);
+                    teamMembers.push(engineer);
+                    createTeam();
+                    break
+
+                case "Intern":
+                    const intern = new Intern(answers.name, parseInt(answers.id), answers.email, answers.school);
+                    teamMembers.push(intern);
+                    createTeam();
+                    break
+                // add a default
+            }
+
+        })
+}
+
+function buildTeam() {
+    console.log("Building Team")
+
+    fs.writeFileSync(outputPath, render(teamMembers), "utf-8")
+}
+
+createManager();
+// function addAnother(){
+
+//     inquirer
+//     .prompt(
+//         [
+//             {    
+//                 type: "confirm",
+//                 message: "Do you want to add another employee?",
+//                 name: "another",
+//                 when: function(another){
+//                     if(another){
+//                           addAnother();
+
+//                   }
+//                     else{
+//                         render(html);
+
+//                     }
+//                 }
 //             }
-//               else{
-//                   render(html);
 
-//               }
-//           }
-//       },
-//       {
-//           type: "input",
-//           message: "Please enter the name",
-//           name: "name"
-//       },
-  
-//       {
-//           type: "input",
-//           message: "Please enter the employee ID number",
-//           name: "id"
-//       },
-  
-//       {
-//           type: "input",
-//           message: "Please enter the email",
-//           name: "email"
-//       },
-  
-//       {
-//           type: "list",
-//           message: "Please select the role",
-//           choices: ["Manager", "Engineer", "Intern"],
-//           name: "role"
-//       },
-  
-//       {
-//           type: "input",
-//           message: "Please enter the office number",
-//           name: "officeNumber",
-//           when: function(answers){
-//           return answers.role === "Manager";
-//           }
-//       },
-  
-//       {
-//           type: "input",
-//           message: "Please enter the gitHub username",
-//           name: "gitHub",
-//           when: function(answers){
-//           return answers.role === "Engineer";
-//           }
-//       },
-  
-//       {
-//           type: "input",
-//           message: "Please enter the school name",
-//           name: "school",
-//           when: function(answers){
-//           return answers.role === "Intern";
-//           }
-//       }
-//     ]
 
-//   // use inquirer to gather information about the development team members by prompting the questions variable
-//   inquirer
-//   .prompt(questions)
-//     // use .then promise and feed in the parameters of name, id, email, role, officeNumber, gitHub, and school
-//     .then(function({name, id, email, role, officeNumber, gitHub, school}){
-//         // define constant html to receive the pushed information into an array
-//         html = [];
-//         // if role is equal to Manager, push the information received for name, id, email, role, and office number
-//         if (role === "Manager"){
-//         html.push([{name}, {id}, {email}, {role}, {officeNumber}]);
-//         start();
-//         // console.log(managerHTML[0]);
-//         }
-//         // if role is equal to Engineer, push the information received for name, id, email, role, and gitHub
-//         else if (role === "Engineer"){
-//         html.push([{name}, {id}, {email}, {role}, {gitHub}]);
-//         start();
-//         }
-//         // if role is equal to Intern, push the information received for name, id, email, role, and school
-//         else if (role === "Intern"){
-//         html.push([{name}, {id}, {email}, {role}, {school}]);
-//         start();
-//         }
-//     })  
+//         ]
+//     )
 // }
 
+// declare a render function to render the information to the HTML page
+// function render(html){
 
-// // declare a render function to render the information to the HTML page
-// function render([Manager, Engineer, Intern]){
 
 // }
-// console.log('working')
-// // call functions
-// start();
+// call functions
+
+
+// Don't want to be able to add multiple managers
+
+// create team
+
+    // create manager
+
+    // create team member
+        // add an engineer
+            // add a new team member
+        // or add an intern
+            // add a new team member
+        // or done (Build Team)
